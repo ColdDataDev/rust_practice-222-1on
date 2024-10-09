@@ -1,3 +1,5 @@
+Numbers
+
 1)fn main() {
     let x: i32 = 5;
     let mut y: u32 = 5;
@@ -124,5 +126,75 @@ fn main() {
     println!("0x80 >> 2 is 0x{:x}", 0x80u32 >> 2);
 }
 
+Char
 
+1)
+use std::mem::size_of_val;
 
+fn main() {
+    let c1 = 'a';
+    assert_eq!(size_of_val(&c1), 4);  // 4 байти для char
+
+    let c2 = '中';
+    assert_eq!(size_of_val(&c2), 4);  // також 4 байти для char
+
+    println!("Success!");
+}
+
+2)
+fn main() {
+    let c1 = "中"; // &str
+    let c1_char = c1.chars().next().unwrap(); // Перетворюємо на char
+    print_char(c1_char);
+}
+
+fn print_char(c: char) {
+    println!("{}", c);
+}
+
+Bool
+
+3)
+fn main() {
+    let _f: bool = false;
+
+    let t = true;
+    if t {
+        println!("Success!");
+    }
+}
+
+4)
+fn main() {
+    let f = false;
+    let t = true && false;
+    assert_eq!(t, f);
+
+    println!("Success!");
+}
+
+Unit type
+
+5)
+fn main() {
+    let _v: () = ();
+
+    let v = ();
+    assert_eq!(v, implicitly_ret_unit());
+
+    println!("Success!");
+}
+
+fn implicitly_ret_unit() {
+    println!("I will return a ()");
+}
+
+6)
+use std::mem::size_of_val;
+
+fn main() {
+    let unit: () = ();
+    assert!(size_of_val(&unit) == 0);  // Розмір unit type дорівнює 0 байт
+
+    println!("Success!");
+}
