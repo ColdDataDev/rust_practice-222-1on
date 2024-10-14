@@ -1,10 +1,12 @@
-string
+Str and &str
 
 1)
 
 
 2)
 
+
+String
 
 3)
 
@@ -24,13 +26,18 @@ string
 8)
 
 
+String escapes
+
 9)
 
 
 10)
 
 
+String index
+
 11)
 
+Operate on UTF8 string
 
 12)
