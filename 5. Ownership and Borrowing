@@ -1,1 +1,137 @@
 1)
+fn main() {
+   let x = 5;
+   // Заповніть пропуск
+   let p = &x;  // Беремо посилання на змінну
+
+   println!("the memory address of x is {:p}", p); // Можливий результат: 0x16fa3ac84
+}
+
+2)
+fn main() {
+    let x = 5;
+    let y = &x;
+
+    // Змінюємо лише цю лінію
+    assert_eq!(5, *y);  // Розіменовуємо посилання
+
+    println!("Success!");
+}
+
+3)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    borrow_object(&s);  // Передаємо посилання на s
+
+    println!("Success!");
+}
+
+fn borrow_object(s: &String) {}  // Функція отримує посилання на String
+
+4)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    push_str(&mut s);  // Передаємо змінне посилання
+
+    println!("Success!");
+}
+
+fn push_str(s: &mut String) {
+    s.push_str("world")
+}
+
+5)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    // Заповнюємо пропуск
+    let p = &mut s;
+    
+    p.push_str("world");
+
+    println!("Success!");
+}
+
+6)
+fn main() {
+    let c = '中';
+
+    let r1 = &c;
+    // Заповнюємо пропуск
+    let r2 = &c;  // Беремо посилання на той самий символ
+
+    assert_eq!(*r1, *r2);
+    
+    // Перевіряємо рівність двох адрес
+    assert_eq!(get_addr(r1), get_addr(r2));
+
+    println!("Success!");
+}
+
+// Отримуємо адресу пам'яті у вигляді рядка
+fn get_addr(r: &char) -> String {
+    format!("{:p}", r)
+}
+
+7)
+fn main() {
+    let mut s = String::from("hello");
+
+    let r1 = &mut s;
+    // Видаляємо використання другого змінного посилання
+    // let r2 = &mut s;  // Коментуємо або видаляємо цей рядок
+
+    println!("{}", r1);
+
+    println!("Success!");
+}
+
+8)
+fn main() {
+    // Змінюємо цей рядок
+    let mut s = String::from("hello, ");
+
+    borrow_object(&mut s);  // Передаємо змінне посилання
+
+    println!("Success!");
+}
+
+fn borrow_object(s: &mut String) {}
+
+9)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    borrow_object(&s);  // Посилання на String
+    
+    s.push_str("world");  // Додаємо рядок до `s`
+
+    println!("Success!");
+}
+
+fn borrow_object(s: &String) {}  // Функція приймає посилання на String
+
+10)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    let r1 = &mut s;
+    r1.push_str("world");
+    // let r2 = &mut s;  // Коментуємо цей рядок
+    // r2.push_str("!");  // Коментуємо цей рядок
+
+    println!("{}", r1);
+}
+
+11)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    let r1 = &mut s;
+    let r2 = &mut s;  // Додаємо друге змінне посилання
+
+    // Додавання використання r1 призведе до помилки
+    println!("{}", r1);
+}
