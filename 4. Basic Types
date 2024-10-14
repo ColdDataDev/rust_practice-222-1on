@@ -4,9 +4,7 @@ Numbers
     let x: i32 = 5;
     let mut y: u32 = 5;
 
-    // Removed the line `y = x;` because you can't assign `i32` to `u32` directly.
-
-    let z = 10; // Type of z is inferred as i32.
+    let z = 10; 
 
     println!("Success!");
 }
@@ -21,7 +19,7 @@ fn main() {
 3)
 fn main() {
     let x = 5;
-    assert_eq!("i32".to_string(), type_of(&x)); // Type of `x` is `i32`.
+    assert_eq!("i32".to_string(), type_of(&x));
 
     println!("Success!");
 }
@@ -40,26 +38,26 @@ fn main() {
 
 5)
 fn main() {
-   let v1 = 251_u8.wrapping_add(8); // Use `wrapping_add` to handle overflow
-   let v2 = i8::checked_add(120, 8).unwrap(); // Changed to a valid i8 addition
+   let v1 = 251_u8.wrapping_add(8); 
+   let v2 = i8::checked_add(120, 8).unwrap();
    println!("{},{}", v1, v2);
 }
 
 6)
 fn main() {
     let v = 1_024 + 0xff + 0o77 + 0b1111_1111;
-    assert!(v == 1597); // Correct value is 1597.
+    assert!(v == 1597); 
 
     println!("Success!");
 }
 
 7)
 fn main() {
-    let x = 1_000.000_1; // f64
-    let y: f32 = 0.12;   // f32
-    let z = 0.01_f64;    // f64
+    let x = 1_000.000_1; 
+    let y: f32 = 0.12;   
+    let z = 0.01_f64;    
 
-    assert_eq!(type_of(&x), "f64".to_string()); // `x` is of type `f64`.
+    assert_eq!(type_of(&x), "f64".to_string()); 
     println!("Success!");
 }
 
@@ -69,7 +67,7 @@ fn type_of<T>(_: &T) -> String {
 
 8)
 fn main() {
-    assert!((0.1 + 0.2 - 0.3).abs() < f64::EPSILON); // Fix due to floating-point precision issues.
+    assert!((0.1 + 0.2 - 0.3).abs() < f64::EPSILON); 
 
     println!("Success!");
 }
@@ -81,44 +79,38 @@ fn main() {
         sum += i;
     }
 
-    assert!(sum == -3); // Sum of -3, -2, -1, 0, 1 is -3.
+    assert!(sum == -3); 
 
     for c in 'a'..='z' {
-        println!("{}", c); // Loop from 'a' to 'z'.
+        println!("{}", c); 
     }
 }
 
 10)
 use std::ops::{Range, RangeInclusive};
 fn main() {
-    assert_eq!((1..5), Range { start: 1, end: 5 }); // Exclusive range
-    assert_eq!((1..=5), RangeInclusive::new(1, 5)); // Inclusive range
+    assert_eq!((1..5), Range { start: 1, end: 5 }); 
+    assert_eq!((1..=5), RangeInclusive::new(1, 5)); 
 
     println!("Success!");
 }
 
 11)
 fn main() {
-    // Integer addition
     assert!(1u32 + 2 == 3);
 
-    // Integer subtraction
     assert!(1i32 - 2 == -1);
-    
-    // Removed assert for `1u8 - 2` as it doesn't compile due to overflow.
 
     assert!(3 * 50 == 150);
 
-    assert!((9.6 / 3.2 - 3.0).abs() < f64::EPSILON); // Fix for floating-point comparison
+    assert!((9.6 / 3.2 - 3.0).abs() < f64::EPSILON); 
 
     assert!(24 % 5 == 4);
     
-    // Short-circuiting boolean logic
     assert!(true && false == false);
     assert!(true || false == true);
     assert!(!true == false);
 
-    // Bitwise operations
     println!("0011 AND 0101 is {:04b}", 0b0011u32 & 0b0101);
     println!("0011 OR 0101 is {:04b}", 0b0011u32 | 0b0101);
     println!("0011 XOR 0101 is {:04b}", 0b0011u32 ^ 0b0101);
@@ -221,27 +213,107 @@ fn main() {
 }
 
 3)
+fn main() {
+    let s = sum(1, 2);
+    assert_eq!(s, 3);
 
+    println!("Success!");
+}
 
-4)
-
-
-5)
+fn sum(x: i32, y: i32) -> i32 {
+    x + y  // Без крапки з комою, це значення буде повернуте
+}
 
 Functions
 
 1)
+fn main() {
+    let (x, y) = (1, 2);
+    let s = sum(x, y);
 
+    assert_eq!(s, 3);
+
+    println!("Success!");
+}
+
+fn sum(x: i32, y: i32) -> i32 {
+    x + y  
+}
 
 2)
+fn main() {
+   print();
+}
 
+// Замість i32 використаємо тип ()
+fn print() -> () {
+   println!("Success!");
+}
+
+2)
+fn main() {
+   print();
+}
+
+fn print() {
+   println!("Success!");
+}
 
 3)
+fn main() {
+    never_return();
 
+    // Це ніколи не виконається
+    println!("Failed!");
+}
+
+fn never_return() -> ! {
+    panic!("This function will never return!");  // Паніка — це функція, що не повертає значення
+}
+
+// Або інший варіант:
+fn never_return() -> ! {
+    loop {}  // Нескінченний цикл, що також ніколи не повертає значення
+}
 
 4)
+fn main() {
+    println!("Success!");
+}
 
+fn get_option(tp: u8) -> Option<i32> {
+    match tp {
+        1 => Some(42),
+        _ => never_return_fn(),
+    }
+}
+
+// Реалізація функції `never_return_fn`
+fn never_return_fn() -> ! {
+    // Варіант 1: Виклик `panic!`
+    panic!("This function never returns!");
+
+    // Варіант 2: Нескінченний цикл
+    // loop {}
+
+    // Варіант 3: Використання `unreachable!`
+    // unreachable!();
+}
 
 5)
+fn main() {
+    // FILL in the blank
+    let b = false;
 
+    let _v = match b {
+        true => 1,
+        // Diverging функція використовується тут, щоб замінити значення для `false`
+        false => {
+            println!("Success!");
+            panic!("we have no value for `false`, but we can panic");
+        }
+    };
+
+    println!("Exercise Failed if printing out this line!");
+}
 
