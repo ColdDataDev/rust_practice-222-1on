@@ -1,6 +1,132 @@
 Ownership
 1)
 fn main() {
+    let x = String::from("Hello world");
+    let y = x.clone(); // Клонування x
+    println!("{}, {}", x, y);
+}
+
+2)
+fn main() {
+    let s1 = String::from("Hello world");
+    let s2 = take_ownership(s1);
+
+    println!("{}", s2);
+}
+
+// Only modify the code below!
+fn take_ownership(s: String) -> String { // Функція повертає значення
+    println!("{}", s);
+    s
+}
+
+3)
+fn main() {
+    let s = give_ownership();
+    println!("{}", s);
+}
+
+// Only modify the code below!
+fn give_ownership() -> String {
+    let s = String::from("Hello world");
+    s // Повертаємо рядок без змін
+}
+
+4)
+fn main() {
+    let s = String::from("Hello World");
+
+    print_str(&s);  // Передаємо посилання
+
+    println!("{}", s);  // Тепер можна знову використовувати s
+}
+
+fn print_str(s: &String) {  // Приймаємо посилання на String
+    println!("{}", s);
+}
+
+5)
+fn main() {
+    let x = (1, 2, (), "hello"); // Використовуємо &str, який підтримує Copy
+    let y = x; // Копіювання
+    println!("{:?}, {:?}", x, y);
+}
+
+Mutability
+
+6)
+fn main() {
+    let mut s = String::from("Hello ");  // Робимо змінною
+    
+    let mut s1 = s;  // Робимо s1 також змінною
+
+    s1.push_str("World!");
+
+    println!("Success!");
+}
+
+7)
+fn main() {
+    let x = Box::new(5);
+    
+    let mut y = Box::new(4); // Створюємо нову змінну типу Box
+    
+    *y = 4;
+    
+    assert_eq!(*x, 5);
+
+    println!("Success!");
+}
+
+8)
+fn main() {
+   let t = (String::from("hello"), String::from("world"));
+
+   let _s = t.0;
+
+   // Modify this line only, don't use `_s`
+   println!("{:?}", t.1);  // Використовуємо другий елемент
+}
+
+9)
+fn main() {
+   let t = (String::from("hello"), String::from("world"));
+
+    // Заповнюємо пропуски
+    let (s1, s2) = t;
+
+    println!("{:?}, {:?}, {:?}", s1, s2, (s1.clone(), s2.clone())); // -> "hello", "world", ("hello", "world")
+}
+
+10)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    let r1 = &mut s;
+    r1.push_str("world");
+
+    // Коментуємо наступний рядок, щоб уникнути конфлікту мутабельних посилань
+    // let r2 = &mut s;
+    // r2.push_str("!");
+
+    println!("{}", r1);  // Використовуємо лише r1
+}
+
+11)
+fn main() {
+    let mut s = String::from("hello, ");
+
+    let r1 = &mut s;
+    let r2 = &mut s;
+
+    // Додаємо цей рядок, щоб викликати помилку компілятора
+    println!("{}", r1); // Це призведе до помилки, тому що r2 вже позичає s
+}
+
+Reference
+
+1)
+fn main() {
    let x = 5;
    // Заповніть пропуск
    let p = &x;  // Беремо посилання на змінну
@@ -55,7 +181,7 @@ fn main() {
     println!("Success!");
 }
 
-Mutability
+Ref
 
 6)
 fn main() {
@@ -78,6 +204,8 @@ fn get_addr(r: &char) -> String {
     format!("{:p}", r)
 }
 
+Borrowing rules
+
 7)
 fn main() {
     let mut s = String::from("hello");
@@ -90,6 +218,8 @@ fn main() {
 
     println!("Success!");
 }
+
+Mutability
 
 8)
 fn main() {
@@ -116,6 +246,8 @@ fn main() {
 
 fn borrow_object(s: &String) {}  // Функція приймає посилання на String
 
+NLL
+
 10)
 fn main() {
     let mut s = String::from("hello, ");
@@ -138,37 +270,3 @@ fn main() {
     // Додавання використання r1 призведе до помилки
     println!("{}", r1);
 }
-
-Reference
-
-1)
-
-
-2)
-
-
-3)
-
-
-4)
-
-
-5)
-
-
-6)
-
-
-7)
-
-
-8)
-
-
-9)
-
-
-10)
-
-
-11)
