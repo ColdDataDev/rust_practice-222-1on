@@ -116,3 +116,249 @@ fn main() {
         println!("{}", c);
     }
 }
+
+
+Array
+
+1)
+fn main() {
+    //тип масиву 5 елементів тип i32
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+
+    //потрібно змінити умову порівняння щоб відповідала довжині масиву
+    assert!(arr.len() == 5);
+
+    println!("Success!");
+}
+
+2)
+fn main() {
+    let arr0 = [1, 2, 3];
+    let arr: [_; 3] = ['a', 'b', 'c'];
+
+    //розмір масиву 3 елементи по 4 байти (Unicode char займає 4 байти)
+    assert!(std::mem::size_of_val(&arr) == 12);
+
+    println!("Success!");
+}
+
+3)
+fn main() {
+    //ініціалізуємо масив з 100 елементів, кожен з яких дорівнює 1
+    let list: [i32; 100] = [1; 100];
+
+    assert!(list[0] == 1);
+    assert!(list.len() == 100);
+
+    println!("Success!");
+}
+
+4)
+fn main() {
+    //всі елементи масиву повинні бути одного типу, виправляємо '3' на 3
+    let _arr = [1, 2, 3];
+
+    println!("Success!");
+}
+
+5)
+fn main() {
+    let arr = ['a', 'b', 'c'];
+
+    //виправляємо індекс щоб він вказував на перший елемент (індексація починається з 0)
+    let ele = arr[0];
+
+    assert!(ele == 'a');
+
+    println!("Success!");
+}
+
+6)
+fn main() {
+    let names = [String::from("Sunfei"), "Sunface".to_string()];
+
+    //використовуємо безпечний метод get для доступу до елементів
+    let name0 = names.get(0).unwrap();
+
+    //індексація масиву закінчується на 1 індекс 2 виходить за межі тому приберемо його
+    //let _name1 = &names[2];
+
+    println!("Success!");
+}
+
+
+Slice
+
+1)
+fn main() {
+    let arr = [1, 2, 3];
+    let s1: &[i32] = &arr[0..2];
+    let s2: &str = "hello, world";
+
+    println!("Success!");
+}
+
+2)
+fn main() {
+    let arr: [char; 3] = ['中', '国', '人'];
+
+    let slice = &arr[..2];
+    
+    //замість 8 (бо це було б для масиву) для зрізу використовується посилання
+    assert!(std::mem::size_of_val(&slice) == 16);  // 2 елементи кожен по 8 байтів для char
+
+    println!("Success!");
+}
+
+3)
+fn main() {
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+    //зробимо зріз масиву на елементи з 2 по 4
+    let slice: &[i32] = &arr[1..4];
+    assert_eq!(slice, &[2, 3, 4]);
+
+    println!("Success!");
+}
+
+String slices
+
+4)
+fn main() {
+    let s = String::from("hello");
+
+    let slice1 = &s[0..2];
+    //використаємо діапазон замість 0..2
+    let slice2 = &s[..2];  //від початку до 2
+    
+    assert_eq!(slice1, slice2);
+
+    println!("Success!");
+}
+
+5)
+fn main() {
+    let s = "你好，世界";
+    //зробимо зріз для одного символу "你" (перші два байти)
+    let slice = &s[0..3];  // 你 займає 3 байти у UTF-8
+
+    assert!(slice == "你");
+
+    println!("Success!");
+}
+
+6)
+fn main() {
+    let mut s = String::from("hello world");
+
+    let letter = first_letter(&s);
+
+    //потрібно прибрати виклик `s.clear()` оскільки змінна `letter` посилається на частину рядка
+    //s.clear();
+
+    println!("the first letter is: {}", letter);
+}
+
+fn first_letter(s: &str) -> &str {
+    &s[..1]
+}
+
+
+Tuple
+
+1)
+fn main() {
+    let _t0: (u8, i16) = (0, -1);
+    // Tuples can be tuple's members
+    let _t1: (u8, (i16, u32)) = (0, (-1, 1));
+    //заповнюємо пропуски правильними типами
+    let t: (u8, u16, i64, &str, String) = (1u8, 2u16, 3i64, "hello", String::from(", world"));
+
+    println!("Success!");
+}
+
+2)
+fn main() {
+    let t = ("i", "am", "sunface");
+    //використовуємо правильний індекс 1 для am а не sunface
+    assert_eq!(t.1, "am");
+
+    println!("Success!");
+}
+
+3)
+fn main() {
+    //Rust може працювати з кортежами до певного розміру тому краще зменшити розмір або розділити дані
+    let too_long_tuple = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);  //прибираємо один елемент
+    println!("too long tuple: {:?}", too_long_tuple);
+}
+
+4)
+fn main() {
+    let tup = (1, 6.4, "hello");
+
+    //розпаковуємо кортеж
+    let (x, z, y) = tup;
+
+    assert_eq!(x, 1);
+    assert_eq!(y, "hello");
+    assert_eq!(z, 6.4);
+
+    println!("Success!");
+}
+
+5)
+fn main() {
+    let (x, y, z);
+
+    //заповнюємо пропуски змінивши порядок змінних
+    (y, z, x) = (1, 2, 3);  // x = 3, y = 1, z = 2
+
+    assert_eq!(x, 3);
+    assert_eq!(y, 1);
+    assert_eq!(z, 2);
+
+    println!("Success!");
+}
+
+6)
+fn main() {
+    //заповнюємо пропуски передаючи пару чисел
+    let (x, y) = sum_multiply((2, 3));  // 2 + 3 = 5, 2 * 3 = 6
+
+    assert_eq!(x, 5);
+    assert_eq!(y, 6);
+
+    println!("Success!");
+}
+
+fn sum_multiply(nums: (i32, i32)) -> (i32, i32) {
+    (nums.0 + nums.1, nums.0 * nums.1)
+}
+
+
+Struct
+
+1)
+
+
+2)
+
+
+3)
+
+
+4)
+
+
+5)
+
+
+6)
+
+
+7)
+
+
+Enum
+
+1)
