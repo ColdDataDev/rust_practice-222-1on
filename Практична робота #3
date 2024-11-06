@@ -1,19 +1,195 @@
 https://www.hackerrank.com/domains/algorithms
 
 1)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'simpleArraySum' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts INTEGER_ARRAY ar as parameter.
+ */
+
+fn simpleArraySum(ar: &[i32]) -> i32 {
+ ar.iter().sum()
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let _ar_count = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    let ar: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let result = simpleArraySum(&ar);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 2)
+fn compare_triplets(a: [i32; 3], b: [i32; 3]) -> [i32; 2] {
+    let mut alice_score = 0;
+    let mut bob_score = 0;
 
+    for i in 0..3 {
+        if a[i] > b[i] {
+            alice_score += 1;
+        } else if a[i] < b[i] {
+            bob_score += 1;
+        }
+        // No points added if a[i] == b[i]
+    }
+
+    [alice_score, bob_score]
+}
+
+fn main() {
+    // Reading input from standard input (stdin)
+    let mut input_line = String::new();
+    std::io::stdin().read_line(&mut input_line).unwrap();
+    let a: Vec<i32> = input_line
+        .trim()
+        .split_whitespace()
+        .map(|x| x.parse().unwrap())
+        .collect();
+
+    input_line.clear();
+    std::io::stdin().read_line(&mut input_line).unwrap();
+    let b: Vec<i32> = input_line
+        .trim()
+        .split_whitespace()
+        .map(|x| x.parse().unwrap())
+        .collect();
+
+    let result = compare_triplets([a[0], a[1], a[2]], [b[0], b[1], b[2]]);
+    
+    // Print the result in the required format
+    println!("{} {}", result[0], result[1]);
+}
 
 3)
+use std::io::{self, BufRead, Write};
 
+fn aVeryBigSum(ar: &[i64]) -> i64 {
+    ar.iter().sum()
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    // Read the number of elements (not used in calculation but required by input format)
+    let _ar_count = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    // Read the list of numbers
+    let ar: Vec<i64> = stdin_iterator.next().unwrap().unwrap()
+        .trim()
+        .split_whitespace()
+        .map(|s| s.parse::<i64>().unwrap())
+        .collect();
+
+    // Calculate the sum
+    let result = aVeryBigSum(&ar);
+
+    // Output the result to stdout
+    println!("{}", result);
+}
 
 4)
+use std::io::{self, BufRead};
 
+fn diagonalDifference(arr: Vec<Vec<i32>>) -> i32 {
+    let n = arr.len();
+    let mut primary_diagonal_sum = 0;
+    let mut secondary_diagonal_sum = 0;
+
+    for i in 0..n {
+        primary_diagonal_sum += arr[i][i];
+        secondary_diagonal_sum += arr[i][n - i - 1];
+    }
+
+    (primary_diagonal_sum - secondary_diagonal_sum).abs()
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
+
+    // Read the size of the matrix
+    let n: usize = lines.next().unwrap().unwrap().trim().parse().unwrap();
+
+    // Read the matrix
+    let mut arr = Vec::new();
+    for _ in 0..n {
+        let row: Vec<i32> = lines
+            .next()
+            .unwrap()
+            .unwrap()
+            .split_whitespace()
+            .map(|x| x.parse::<i32>().unwrap())
+            .collect();
+        arr.push(row);
+    }
+
+    // Calculate the diagonal difference
+    let result = diagonalDifference(arr);
+
+    // Output the result
+    println!("{}", result);
+}
 
 5)
+use std::io::{self, BufRead};
 
+fn plus_minus(arr: &[i32]) {
+    let n = arr.len() as f64;  // Total count as a floating-point number for division
+
+    let mut positive_count = 0;
+    let mut negative_count = 0;
+    let mut zero_count = 0;
+
+    // Count positive, negative, and zero elements
+    for &value in arr {
+        if value > 0 {
+            positive_count += 1;
+        } else if value < 0 {
+            negative_count += 1;
+        } else {
+            zero_count += 1;
+        }
+    }
+
+    // Calculate and print ratios with six decimal places
+    println!("{:.6}", positive_count as f64 / n);
+    println!("{:.6}", negative_count as f64 / n);
+    println!("{:.6}", zero_count as f64 / n);
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
+
+    // Read the size of the array (though we don't actually need to use it here)
+    let _n: usize = lines.next().unwrap().unwrap().trim().parse().unwrap();
+
+    // Read the array elements
+    let arr: Vec<i32> = lines.next().unwrap().unwrap()
+        .split_whitespace()
+        .map(|x| x.parse::<i32>().unwrap())
+        .collect();
+
+    // Call the function to compute and print the ratios
+    plus_minus(&arr);
+}
 
 6)
 
