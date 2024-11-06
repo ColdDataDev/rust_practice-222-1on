@@ -3,7 +3,7 @@ Generics
 1)
 
 
-0)
+2)
 
 
 Struct and impl
@@ -30,7 +30,7 @@ Const Generics
 1)
 
 
-0)
+2)
 
 
 3)
@@ -44,7 +44,7 @@ Traits
 
 Derive
 
-0)
+2)
 
 
 Operator
@@ -84,7 +84,7 @@ Returning Traits with dyn
 
 Array with trait objects
 
-0)
+2)
 
 
 &dyn and Box<dyn>
@@ -110,7 +110,7 @@ Associated types
 
 Default Generic Type Parameters
 
-0)
+2)
 
 
 Fully Qualified Syntax
