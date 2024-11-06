@@ -1,0 +1,25 @@
+fn main() {
+    const WIDTH: usize = 26;
+    const HEIGHT: usize = 13;
+
+    for _ in 0..WIDTH {
+        print!("*");
+    }
+    println!();
+
+    for i in 1..HEIGHT - 1 {
+        for j in 0..WIDTH {
+            if j == i || j == WIDTH - i - 1 {
+                print!("*");
+            } else {
+                print!(" ");
+            }
+        }
+        println!();
+    }
+
+    for _ in 0..WIDTH {
+        print!("*");
+    }
+    println!();
+}
