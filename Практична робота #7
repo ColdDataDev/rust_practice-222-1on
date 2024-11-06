@@ -1,1 +1,26 @@
+fn main() {
+    const TRIANGLE_COUNT: usize = 5;  
 
+   
+    (1..=TRIANGLE_COUNT).for_each(|i| {
+        let height = i; 
+
+        
+        for j in 0..height {
+            let spaces = TRIANGLE_COUNT - j - 1; 
+            let stars = 2 * j + 1;                
+
+            
+            (0..spaces).for_each(|_| print!(" "));
+            
+            (0..stars).for_each(|_| print!("*"));
+            println!();
+        }
+    });
+
+    
+    (0..TRIANGLE_COUNT).for_each(|_| {
+        (0..TRIANGLE_COUNT * 2 - 1).for_each(|_| print!("*"));
+        println!();
+    });
+}
