@@ -1,1 +1,65 @@
+use rand::Rng;
 
+/// Функція рахує мінімальну кількість переміщень вантажу для рівномірного розподілу
+fn count_permutation(shipments: &Vec<u32>) -> Option<usize> {
+    let total: u32 = shipments.iter().sum();
+    let n = shipments.len();
+    
+    // Перевіряємо, чи можливо розподілити вантаж рівномірно
+    if total as usize % n != 0 {
+        return None; // Повертаємо None, якщо рівномірний розподіл неможливий
+    }
+    
+    let average = total / n as u32;
+    let mut moves = 0;
+    let mut balance = 0;
+    
+    // Пробігаємо по всіх кораблях та обчислюємо, скільки переміщень необхідно
+    for &load in shipments.iter() {
+        balance += (load as i32 - average as i32); // Баланс вантажу на поточному кораблі
+        moves += balance.abs() as usize;
+    }
+    
+    Some(moves)
+}
+
+/// Функція генерує вектор `Vec<u32>` для рівномірного розподілу вантажу між кораблями
+fn gen_shipments(n: usize) -> Vec<u32> {
+    let mut rng = rand::thread_rng();
+    let average = rng.gen_range(1..=10); // Базове значення вантажу для кожного корабля
+    let mut shipments: Vec<u32> = vec![average; n];
+    let remainder = rng.gen_range(0..n); // Додаємо залишок, який рівномірно ділиться на `n`
+
+    // Розподіляємо залишок рівномірно
+    for i in 0..remainder {
+        shipments[i] += 1;
+    }
+
+    shipments
+}
+
+fn main() {
+    // Приклад тестових даних
+    let shipments1 = vec![8, 2, 2, 4, 4];
+    let shipments2 = vec![9, 3, 7, 2, 9];
+
+    // Розрахунок кількості переміщень
+    match count_permutation(&shipments1) {
+        Some(moves) => println!("Для shipments1 мінімальна кількість переміщень: {}", moves),
+        None => println!("Для shipments1 рівномірний розподіл неможливий"),
+    }
+
+    match count_permutation(&shipments2) {
+        Some(moves) => println!("Для shipments2 мінімальна кількість переміщень: {}", moves),
+        None => println!("Для shipments2 рівномірний розподіл неможливий"),
+    }
+
+    // Приклад використання генератора вантажу
+    let generated_shipments = gen_shipments(5);
+    println!("Згенерований вантаж: {:?}", generated_shipments);
+
+    match count_permutation(&generated_shipments) {
+        Some(moves) => println!("Для згенерованого вантажу мінімальна кількість переміщень: {}", moves),
+        None => println!("Для згенерованого вантажу рівномірний розподіл неможливий"),
+    }
+}
