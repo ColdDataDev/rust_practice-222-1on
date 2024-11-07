@@ -192,45 +192,781 @@ fn main() {
 }
 
 6)
+fn staircase(n: u32) { 
+    for i in 1..=n {
+        // Generate the required spaces and hashes for each row
+        let spaces = " ".repeat((n - i) as usize);
+        let hashes = "#".repeat(i as usize);
+        
+        // Print each row with no extra spaces or characters
+        println!("{}{}", spaces, hashes);
+    }
+}
 
+fn main() {
+    let n = 6; // Example input; you can change this to test other cases
+    staircase(n);
+}
 
 7)
+use std::io::{self, BufRead};
 
+/*
+ * Complete the 'miniMaxSum' function below.
+ *
+ * The function accepts INTEGER_ARRAY arr as parameter.
+ */
+
+fn miniMaxSum(arr: &[i64]) {
+    // Sort the array
+    let mut sorted_arr = arr.to_vec();
+    sorted_arr.sort();
+
+    // Calculate the minimum and maximum sum by summing four elements
+    let min_sum: i64 = sorted_arr.iter().take(4).sum();
+    let max_sum: i64 = sorted_arr.iter().skip(1).sum();
+
+    // Print the results in one line as required
+    println!("{} {}", min_sum, max_sum);
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    // Read the input, split by spaces, and parse into integers
+    let arr: Vec<i64> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.parse::<i64>().unwrap())
+        .collect();
+
+    // Call the function
+    miniMaxSum(&arr);
+}
 
 8)
+use std::env; 
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'birthdayCakeCandles' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts INTEGER_ARRAY candles as parameter.
+ */
+
+fn birthdayCakeCandles(candles: &[i32]) -> i32 {
+    
+    let max_height = *candles.iter().max().unwrap();
+    
+    let count = candles.iter().filter(|&&height| height == max_height).count();
+    
+    count as i32
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let _candles_count = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    let candles: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let result = birthdayCakeCandles(&candles);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 9)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'timeConversion' function below.
+ *
+ * The function is expected to return a STRING.
+ * The function accepts STRING s as parameter.
+ */
+
+fn timeConversion(s: &str) -> String {
+    
+    let period = &s[8..]; 
+    let mut hours = s[0..2].parse::<u32>().unwrap();
+    let minutes_seconds = &s[2..8]; 
+
+    if period == "AM" {
+        if hours == 12 {
+            
+            hours = 0;
+        }
+    } else {
+        if hours != 12 {
+           
+            hours += 12;
+        }
+    }
+
+    format!("{:02}{}", hours, minutes_seconds)
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let s = stdin_iterator.next().unwrap().unwrap();
+
+    let result = timeConversion(&s);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 10)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'gradingStudents' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts INTEGER_ARRAY grades as parameter.
+ */
+
+fn gradingStudents(grades: &[i32]) -> Vec<i32> {
+    grades.iter().map(|&grade| {
+        if grade < 40 {
+            grade  // No rounding for failing grades
+        } else {
+            let next_multiple_of_5 = (grade / 5 + 1) * 5;
+            if next_multiple_of_5 - grade < 5 {
+                next_multiple_of_5  // Round up if the difference is less than 5
+            } else {
+                grade  // Keep the grade as is if no rounding
+            }
+        }
+    }).collect()
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let grades_count = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    let mut grades: Vec<i32> = Vec::with_capacity(grades_count as usize);
+
+    for _ in 0..grades_count {
+        let grades_item = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+        grades.push(grades_item);
+    }
+
+    let result = gradingStudents(&grades);
+
+    for i in 0..result.len() {
+        write!(&mut fptr, "{}", result[i]).ok();
+
+        if i != result.len() - 1 {
+            writeln!(&mut fptr).ok();
+        }
+    }
+
+    writeln!(&mut fptr).ok();
+}
 
 11)
+use std::io::{self, BufRead};
 
+/*
+ * Complete the 'countApplesAndOranges' function below.
+ *
+ * The function accepts following parameters:
+ *  1. INTEGER s  - start of the house
+ *  2. INTEGER t  - end of the house
+ *  3. INTEGER a  - position of the apple tree
+ *  4. INTEGER b  - position of the orange tree
+ *  5. INTEGER_ARRAY apples - distances at which apples fall
+ *  6. INTEGER_ARRAY oranges - distances at which oranges fall
+ */
+
+fn countApplesAndOranges(s: i32, t: i32, a: i32, b: i32, apples: &[i32], oranges: &[i32]) {
+    let mut apple_count = 0;
+    let mut orange_count = 0;
+
+    // Count how many apples land on the house
+    for &apple in apples {
+        let landing_position = a + apple;
+        if landing_position >= s && landing_position <= t {
+            apple_count += 1;
+        }
+    }
+
+    // Count how many oranges land on the house
+    for &orange in oranges {
+        let landing_position = b + orange;
+        if landing_position >= s && landing_position <= t {
+            orange_count += 1;
+        }
+    }
+
+    // Print the results
+    println!("{}", apple_count);
+    println!("{}", orange_count);
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    // Read the first line: starting and ending point of the house
+    let first_line: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .split_whitespace()
+        .map(|s| s.parse().unwrap())
+        .collect();
+    let s = first_line[0];
+    let t = first_line[1];
+
+    // Read the second line: positions of the apple and orange trees
+    let second_line: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .split_whitespace()
+        .map(|s| s.parse().unwrap())
+        .collect();
+    let a = second_line[0];
+    let b = second_line[1];
+
+    // Read the third line: number of apples and oranges
+    let _third_line: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .split_whitespace()
+        .map(|s| s.parse().unwrap())
+        .collect();
+
+    // Read the fourth line: distances for each apple
+    let apples: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .split_whitespace()
+        .map(|s| s.parse().unwrap())
+        .collect();
+
+    // Read the fifth line: distances for each orange
+    let oranges: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .split_whitespace()
+        .map(|s| s.parse().unwrap())
+        .collect();
+
+    // Call the function to count apples and oranges that land on the house
+    countApplesAndOranges(s, t, a, b, &apples, &oranges);
+}
 
 12)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'kangaroo' function below.
+ *
+ * The function is expected to return a STRING.
+ * The function accepts following parameters:
+ *  1. INTEGER x1
+ *  2. INTEGER v1
+ *  3. INTEGER x2
+ *  4. INTEGER v2
+ */
+
+fn kangaroo(x1: i32, v1: i32, x2: i32, v2: i32) -> String {
+    // If the kangaroos have the same velocity
+    if v1 == v2 {
+        // They will only meet if they start at the same position
+        if x1 == x2 {
+            return "YES".to_string();
+        } else {
+            return "NO".to_string();
+        }
+    }
+
+    // If the velocities are different, check if the difference in positions is divisible by the difference in velocities
+    if (x2 - x1) % (v1 - v2) == 0 && (x2 - x1) / (v1 - v2) >= 0 {
+        return "YES".to_string();
+    }
+
+    "NO".to_string()
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let first_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
+
+    let x1 = first_multiple_input[0].trim().parse::<i32>().unwrap();
+    let v1 = first_multiple_input[1].trim().parse::<i32>().unwrap();
+    let x2 = first_multiple_input[2].trim().parse::<i32>().unwrap();
+    let v2 = first_multiple_input[3].trim().parse::<i32>().unwrap();
+
+    let result = kangaroo(x1, v1, x2, v2);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 13)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
+use std::cmp::min;
 
+fn gcd(x: i32, y: i32) -> i32 {
+    if y == 0 { x } else { gcd(y, x % y) }
+}
+
+fn lcm(x: i32, y: i32) -> i32 {
+    (x * y) / gcd(x, y)
+}
+
+fn getTotalX(a: &[i32], b: &[i32]) -> i32 {
+    // Step 1: Find the LCM of all elements in array a
+    let lcm_value = a.iter().fold(1, |acc, &x| lcm(acc, x));
+    
+    // Step 2: Find the GCD of all elements in array b
+    let gcd_value = b.iter().fold(b[0], |acc, &x| gcd(acc, x));
+    
+    // Step 3: Find how many multiples of lcm_value are divisors of gcd_value
+    let mut count = 0;
+    let mut multiple = lcm_value;
+    
+    // We iterate over all multiples of lcm_value up to gcd_value
+    while multiple <= gcd_value {
+        if gcd_value % multiple == 0 {
+            count += 1;
+        }
+        multiple += lcm_value;
+    }
+    
+    count
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let first_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
+
+    let n = first_multiple_input[0].trim().parse::<i32>().unwrap();
+    let m = first_multiple_input[1].trim().parse::<i32>().unwrap();
+
+    let arr: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let brr: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let total = getTotalX(&arr, &brr);
+
+    writeln!(&mut fptr, "{}", total).ok();
+}
 
 14)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'breakingRecords' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts INTEGER_ARRAY scores as parameter.
+ */
+
+fn breakingRecords(scores: &[i32]) -> Vec<i32> {
+    let mut min_score = scores[0];
+    let mut max_score = scores[0];
+    let mut min_breaks = 0;
+    let mut max_breaks = 0;
+
+    // Iterate over the scores starting from the second game (index 1)
+    for &score in &scores[1..] {
+        // Check if this score breaks the max record
+        if score > max_score {
+            max_score = score;
+            max_breaks += 1;
+        }
+        // Check if this score breaks the min record
+        if score < min_score {
+            min_score = score;
+            min_breaks += 1;
+        }
+    }
+
+    // Return the result as a vector with [max_breaks, min_breaks]
+    vec![max_breaks, min_breaks]
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let n = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    let scores: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let result = breakingRecords(&scores);
+
+    for i in 0..result.len() {
+        write!(&mut fptr, "{}", result[i]).ok();
+
+        if i != result.len() - 1 {
+            write!(&mut fptr, " ").ok();
+        }
+    }
+
+    writeln!(&mut fptr).ok();
+}
 
 15)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'birthday' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ *  1. INTEGER_ARRAY s
+ *  2. INTEGER d
+ *  3. INTEGER m
+ */
+
+fn birthday(s: &[i32], d: i32, m: i32) -> i32 {
+    let mut count = 0;
+
+    // Check for all possible contiguous segments of length m
+    for i in 0..=s.len() - m as usize {
+        let sum: i32 = s[i..(i + m as usize)].iter().sum();
+        if sum == d {
+            count += 1;
+        }
+    }
+
+    count
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let n = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    let s: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let first_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
+
+    let d = first_multiple_input[0].trim().parse::<i32>().unwrap();
+
+    let m = first_multiple_input[1].trim().parse::<i32>().unwrap();
+
+    let result = birthday(&s, d, m);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 16)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'divisibleSumPairs' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ *  1. INTEGER n
+ *  2. INTEGER k
+ *  3. INTEGER_ARRAY ar
+ */
+
+fn divisibleSumPairs(n: i32, k: i32, ar: &[i32]) -> i32 {
+    let mut remainder_count = vec![0; k as usize];
+    let mut count = 0;
+
+    // Step 1: Count remainders
+    for &num in ar {
+        let remainder = (num % k + k) % k; // to handle negative numbers correctly
+        remainder_count[remainder as usize] += 1;
+    }
+
+    // Step 2: Find pairs
+    // Case 1: Pair remainder 0 elements with each other
+    count += remainder_count[0] * (remainder_count[0] - 1) / 2;
+
+    // Case 2: Pair remainder r with remainder k-r (for r = 1 to k/2)
+    for r in 1..=(k / 2) {
+        if r == k - r {
+            count += remainder_count[r as usize] * (remainder_count[r as usize] - 1) / 2;
+        } else {
+            count += remainder_count[r as usize] * remainder_count[(k - r) as usize];
+        }
+    }
+
+    count
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let first_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
+
+    let n = first_multiple_input[0].trim().parse::<i32>().unwrap();
+
+    let k = first_multiple_input[1].trim().parse::<i32>().unwrap();
+
+    let ar: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let result = divisibleSumPairs(n, k, &ar);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 17)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'migratoryBirds' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts INTEGER_ARRAY arr as parameter.
+ */
+
+fn migratoryBirds(arr: &[i32]) -> i32 {
+    // Create an array to store the frequency of each bird type (1-5)
+    let mut frequency = vec![0; 5];  // index 0 corresponds to bird type 1, index 4 corresponds to bird type 5
+
+    // Step 1: Count the frequency of each bird type
+    for &bird in arr {
+        frequency[(bird - 1) as usize] += 1;
+    }
+
+    // Step 2: Find the bird type with the maximum frequency
+    let mut max_freq = 0;
+    let mut bird_type = 0;
+    
+    for (index, &freq) in frequency.iter().enumerate() {
+        if freq > max_freq {
+            max_freq = freq;
+            bird_type = index + 1;  // Bird type is index + 1
+        }
+    }
+
+    bird_type as i32  // Convert bird_type from usize to i32 before returning
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let _arr_count = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    let arr: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let result = migratoryBirds(&arr);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 18)
+use std::io::{self, BufRead};
+
+/*
+ * Complete the 'bonAppetit' function below.
+ *
+ * The function accepts following parameters:
+ *  1. INTEGER_ARRAY bill
+ *  2. INTEGER k
+ *  3. INTEGER b
+ */
+
+fn bonAppetit(bill: &[i32], k: i32, b: i32) {
+    // Calculate the total sum of the items
+    let total: i32 = bill.iter().sum();
+    
+    // Subtract the item Anna didn't eat
+    let anna_share = (total - bill[k as usize]) / 2;
+    
+    // If Brian charged her the correct amount
+    if b == anna_share {
+        println!("Bon Appetit");
+    } else {
+        // If overcharged, print the difference
+        println!("{}", b - anna_share);
+    }
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let first_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
+
+    let n = first_multiple_input[0].trim().parse::<i32>().unwrap();
+    let k = first_multiple_input[1].trim().parse::<i32>().unwrap();
+
+    let bill: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let b = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    bonAppetit(&bill, k, b);
+}
 
 19)
+use std::collections::HashMap;
+use std::io::{self, BufRead, Write};
 
+fn sockMerchant(n: i32, ar: &[i32]) -> i32 {
+    // HashMap to count occurrences of each color
+    let mut color_count = HashMap::new();
+    
+    // Count each color's occurrences
+    for &sock in ar {
+        *color_count.entry(sock).or_insert(0) += 1;
+    }
+    
+    // Calculate the number of pairs
+    let mut pairs = 0;
+    for &count in color_count.values() {
+        pairs += count / 2;  // Integer division gives the number of pairs
+    }
+    
+    pairs
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    // Read the number of socks (not needed directly)
+    let n = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+    
+    // Read the array of sock colors
+    let ar: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.parse::<i32>().unwrap())
+        .collect();
+    
+    // Get the result from sockMerchant function
+    let result = sockMerchant(n, &ar);
+    
+    // Output the result
+    let mut fptr = io::stdout();
+    writeln!(&mut fptr, "{}", result).ok();
+}
 
 20)
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+/*
+ * Complete the 'pageCount' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ *  1. INTEGER n
+ *  2. INTEGER p
+ */
+
+fn pageCount(n: i32, p: i32) -> i32 {
+    // The number of flips if we start from the front
+    let from_front = p / 2;
+    
+    // The number of flips if we start from the back
+    let from_back = (n / 2) - (p / 2);
+    
+    // Return the minimum number of flips
+    std::cmp::min(from_front, from_back)
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    // Read the number of pages in the book
+    let n = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    // Read the page number to go to
+    let p = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    // Calculate the result
+    let result = pageCount(n, p);
+
+    // Write the result to the output
+    writeln!(&mut fptr, "{}", result).ok();
+}
